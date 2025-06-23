@@ -2,7 +2,7 @@
 
 [![Lint](https://github.com/dcjulian29/ansible-role-opencanary/actions/workflows/lint.yml/badge.svg)](https://github.com/dcjulian29/ansible-role-opencanary/actions/workflows/lint.yml) [![GitHub Issues](https://img.shields.io/github/issues-raw/dcjulian29/ansible-role-opencanary.svg)](https://github.com/dcjulian29/ansible-role-opencanary/issues)
 
-This an Ansible role to install and configures an OpenCanary honeypot.
+This an Ansible role to install and configure an OpenCanary honeypot.
 
 ## Requirements
 
