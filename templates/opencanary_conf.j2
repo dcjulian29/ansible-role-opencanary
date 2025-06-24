@@ -1,0 +1,166 @@
+{
+    "device.node_id": "{{ opencanary_device_node_id }}",
+    "ip.ignorelist": {{  opencanary_ip_ignorelist  | to_json }},
+    "logtype.ignorelist": {{ opencanary_logtype_ignorelist | to_json }},
+    "git.enabled": {{ opencanary_git_enabled | to_json }},
+    "git.port" : {{ opencanary_git_port }},
+    "ftp.enabled": {{ opencanary_ftp_enabled | to_json }},
+    "ftp.port": {{ opencanary_ftp_port }},
+    "ftp.banner": "{{ opencanary_ftp_banner }}",
+    "http.banner": "{{ opencanary_http_banner }}",
+    "http.enabled": {{ opencanary_http_enabled | to_json }},
+    "http.port": {{ opencanary_http_port }},
+    "http.skin": "{{ opencanary_http_skin }}",
+    "http.skin.list": [
+        {
+            "desc": "Plain HTML Login",
+            "name": "basicLogin"
+        },
+        {
+            "desc": "Synology NAS Login",
+            "name": "nasLogin"
+        }{% if opencanary_http_customskin_folder is defined %},
+        {
+            "desc": "Custom HTTP Skin",
+            "name": "{{ opencanary_http_skin }}"
+        }{% endif %}
+    ],
+    "https.enabled": {{ opencanary_https_enabled | to_json }},
+    "https.port": {{ opencanary_https_port }},
+    "https.skin": "{{ opencanary_https_skin }}",
+    "https.certificate": "{{ opencanary_https_certificate }}",
+    "https.key": "{{ opencanary_https_key }}",
+    "httpproxy.enabled" : {{ opencanary_httpproxy_enabled | to_json }},
+    "httpproxy.port": {{ opencanary_httpproxy_port }},
+    "httpproxy.skin": "{{ opencanary_httpproxy_skin }}",
+    "httproxy.skin.list": [
+        {
+            "desc": "Squid",
+            "name": "squid"
+        },
+        {
+            "desc": "Microsoft ISA Server Web Proxy",
+            "name": "ms-isa"
+        }
+    ],
+    "llmnr.enabled": {{ opencanary_llmnr_enabled | to_json }},
+    "llmnr.query_interval": {{ opencanary_llmnr_query_interval }},
+    "llmnr.query_splay": {{ opencanary_llmnr_query_splay }},
+    "llmnr.hostname": "{{ opencanary_llmnr_hostname }}",
+    "llmnr.port": {{ opencanary_llmnr_port }},
+    "logger": {
+        "class": "PyLogger",
+        "kwargs": {
+            "formatters": {
+                "plain": {
+                    "format": "%(message)s"
+                },
+                "syslog_rfc": {
+                    "format": "opencanaryd[%(process)-5s:%(thread)d]: %(name)s %(levelname)-5s %(message)s"
+                }
+            },
+            "handlers": {
+                "console": {
+                    "class": "logging.StreamHandler",
+                    "stream": "ext://sys.stdout"
+                },
+                "file": {
+                    "class": "logging.FileHandler",
+                    "filename": "{{ opencanary_logger_filename }}"
+                }{% if opencanary_logger_syslog_url | length > 0 %},
+                "syslog-unix": {
+                     "class": "logging.handlers.SysLogHandler",
+                     "formatter": "syslog_rfc",
+                     "address": [
+                        "{{ opencanary_logger_syslog_url }}",
+                        {{ opencanary_logger_syslog_port }}
+                     ],
+                "socktype": "ext://socket.SOCK_DGRAM"
+                }{% endif %}{% if opencanary_smtp_mailhost | length > 0 %},
+                "SMTP": {
+                     "class": "logging.handlers.SMTPHandler",
+                     "mailhost": ["{{ opencanary_smtp_mailhost }}", {{ opencanary_smtp_port }}],
+                     "fromaddr": "{{ opencanary_smtp_from }}",
+                     "toaddrs" : ["{{ opencanary_smtp_to }}"],
+                     "subject" : "{{ smtp_subject }}"
+                }{% endif %}{% if opencanary_slack_webhook_url | length > 0 %},
+                "slack":{
+                     "class":"opencanary.logger.SlackHandler",
+                     "webhook_url": "{{ opencanary_slack_webhook_url }}"
+                }{% endif %}{% if opencanary_teams_webhook_url | length > 0 %},
+                "teams": {
+                    "class": "opencanary.logger.TeamsHandler",
+                    "webhook_url": "{{ opencanary_teams_webhook_url }}"
+                }{% endif %}{% if opencanary_webhook_url | length > 0 %},
+                "webhook": {
+                    "class": "opencanary.logger.WebhookHandler",
+                    "url": "{{ opencanary_webhook_url }}",
+                    "method": "{{ opencanary_webhook_method }}",
+                    "data": "{{ opencanary_webhook_data }}",
+                    "status_code": {{ opencanary_webhook_status_code }},
+                    "ignore": {{ opencanary_webhook_ignore | to_json }}
+                }{% endif %}
+            }
+        }
+    },
+    "portscan.enabled": {{ opencanary_portscan_enabled | to_json }},
+    "portscan.ignore_localhost": {{ opencanary_portscan_ignore_localhost | to_json }},
+    "portscan.logfile":"/var/log/kern.log",
+    "portscan.synrate": {{ opencanary_portscan_synrate }},
+    "portscan.nmaposrate": {{ opencanary_portscan_nmaposrate }},
+    "portscan.lorate": {{ opencanary_portscan_lorate }},
+    "portscan.ignore_ports": {{  opencanary_portscan_ignore_ports | to_json }},
+    {% if opencanary_portscan_iptables_path | length > 0 %}
+"portscan.iptables_path": "{{ opencanary_portscan_iptables_path }}",
+    {% endif %}"smb.auditfile": "{{ opencanary_smb_auditfile }}",
+    "smb.enabled": {{ opencanary_samba_enabled | to_json }},
+    "mysql.enabled": {{ opencanary_mysql_enabled | to_json }},
+    "mysql.port": {{ opencanary_mysql_port }},
+    "mysql.banner": "{{ opencanary_mysql_banner }}",
+    "ssh.enabled": {{ opencanary_ssh_enabled | to_json }},
+    "ssh.port": {{ opencanary_ssh_port }},
+    "ssh.version": "{{ opencanary_ssh_version }}",
+    "redis.enabled": {{ opencanary_redis_enabled | to_json }},
+    "redis.port": {{ opencanary_redis_port }},
+    "rdp.enabled": {{ opencanary_rdp_enabled | to_json }},
+    "rdp.port": {{ opencanary_rdp_port }},
+    "sip.enabled": {{ opencanary_sip_enabled | to_json }},
+    "sip.port": {{ opencanary_sip_port }},
+    "snmp.enabled": {{ opencanary_snmp_enabled | to_json }},
+    "snmp.port": {{ opencanary_snmp_port }},
+    "ntp.enabled": {{ opencanary_ntp_enabled | to_json }},
+    "ntp.port": {{ opencanary_ntp_port }},
+    "tftp.enabled": {{ opencanary_tftp_enabled | to_json }},
+    "tftp.port": {{ opencanary_tftp_port }},
+    "tcpbanner.maxnum":{{ opencanary_tcpbanner_maxnum }},
+    "tcpbanner.enabled": {{ opencanary_tcpbanner_enabled | to_json }},
+    "tcpbanner_1.enabled": {{ opencanary_tcpbanner_1_enabled | to_json }},
+    "tcpbanner_1.port": {{ opencanary_tcpbanner_1_port }},
+    "tcpbanner_1.datareceivedbanner": "{{ opencanary_tcpbanner_1_datareceivedbanner }}",
+    "tcpbanner_1.initbanner": "{{ opencanary_tcpbanner_1_initbanner }}",
+    "tcpbanner_1.alertstring.enabled": {{ opencanary_tcpbanner_1_alertstring_enabled | to_json }},
+    "tcpbanner_1.alertstring": "{{ opencanary_tcpbanner_1_alertstring }}",
+    "tcpbanner_1.keep_alive.enabled": {{ opencanary_tcpbanner_1_keep_alive_enabled | to_json }},
+    "tcpbanner_1.keep_alive_secret": "{{ opencanary_tcpbanner_1_keep_alive_secret }}",
+    "tcpbanner_1.keep_alive_probes": {{ opencanary_tcpbanner_1_keep_alive_probes }},
+    "tcpbanner_1.keep_alive_interval":{{ opencanary_tcpbanner_1_keep_alive_interval }},
+    "tcpbanner_1.keep_alive_idle": {{ opencanary_tcpbanner_1_keep_alive_idle }},
+    "telnet.enabled": {{ opencanary_telnet_enabled | to_json }},
+    "telnet.port": {{ opencanary_telnet_port }},
+    "telnet.banner": "{{ opencanary_telnet_banner }}",
+    "telnet.honeycreds": [
+        {
+            "username": "admin",
+            "password": "$pbkdf2-sha512$19000$bG1NaY3xvjdGyBlj7N37Xw$dGrmBqqWa1okTCpN3QEmeo9j5DuV2u1EuVFD8Di0GxNiM64To5O/Y66f7UASvnQr8.LCzqTm6awC8Kj/aGKvwA"
+        },
+        {
+            "username": "admin",
+            "password": "admin1"
+        }
+    ],
+    "mssql.enabled": {{ opencanary_mssql_enabled | to_json }},
+    "mssql.version": "{{ opencanary_mssql_version }}",
+    "mssql.port": {{ opencanary_mssql_port }},
+    "vnc.enabled": {{ opencanary_vnc_enabled | to_json }},
+    "vnc.port": {{ opencanary_vnc_port }}
+}

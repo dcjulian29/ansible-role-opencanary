@@ -1,0 +1,103 @@
+---
+- name: Ensure dependencies installed
+  ansible.builtin.apt:
+    name: "{{ apt_packages }}"
+    state: "{{ 'latest' }}"
+    update_cache: yes
+
+- name: Ensure Samba services exist
+  ansible.builtin.apt:
+    name: samba
+    state: "{{ 'latest' }}"
+  when: opencanary_samba_enabled
+
+- name: Ensure OpenCanary is installed
+  ansible.builtin.pip:
+    name: opencanary
+    virtualenv: "{{ opencanary_install_dir }}"
+    virtualenv_command: "/usr/bin/python3 -m venv"
+    version: "{{ opencanary_version }}"
+
+- name: Ensure pcap development library is installed
+  ansible.builtin.apt:
+    name: libpcap-dev
+    state: "{{ 'latest' }}"
+  when: opencanary_snmp_enabled
+
+- name: Ensure SMNP python dependencies are installed
+  ansible.builtin.pip:
+    name:
+      - scapy
+      - pcapy-ng
+    virtualenv: "{{ opencanary_install_dir }}"
+    virtualenv_command: "/usr/bin/python3 -m venv"
+  when: opencanary_snmp_enabled
+
+- name: Ensure LLMNR python dependency is installed
+  ansible.builtin.pip:
+    name:
+      - scapy
+    virtualenv: "{{ opencanary_install_dir }}"
+    virtualenv_command: "/usr/bin/python3 -m venv"
+  when: opencanary_llmnr_enabled
+
+- name: Ensure configuration directory exists
+  ansible.builtin.file:
+    path: /etc/opencanaryd
+    state: directory
+    owner: 0
+    group: 0
+    mode: "0664"
+
+- name: Ensure OpenCanary service exists
+  ansible.builtin.template:
+    src: opencanaryd_service.j2
+    dest: /etc/systemd/system/opencanaryd.service
+
+- name: Ensure OpenCanary service is enabled
+  ansible.builtin.systemd:
+    name: opencanaryd
+    enabled: yes
+    masked: no
+    daemon_reload: yes
+
+- name: Ensure OpenCanary is configured
+  ansible.builtin.template:
+    src: opencanary_conf.j2
+    dest: /etc/opencanaryd/opencanary.conf
+  notify: Restart opencanaryd
+
+- name: Determine python venv version
+  ansible.builtin.command: 'ls "{{ opencanary_install_dir }}/lib"'
+  register: version
+
+- name: Ensure custom skin folder and files exist
+  ansible.builtin.copy:
+    src: "{{ opencanary_http_customskin_folder }}"
+    dest: "{{ opencanary_install_dir }}/lib/{{ version.stdout }}/site-packages/opencanary/modules/data/http/skin/"
+  when: opencanary_custom_skin_folder | length > 0
+
+- block:
+    - name: Ensure the Samba share folder exists
+      ansible.builtin.file:
+        path: "{{ opencanary_samba_path }}"
+        state: directory
+        mode: "0777"
+
+    - name: Ensure Samba is configured
+      ansible.builtin.template:
+        src: samba_conf.j2
+        dest: /etc/samba/smb.conf
+      notify: Restart samba
+
+    - name: Ensure Samba Audit is configured
+      ansible.builtin.template:
+        src: samba_audit.j2
+        dest: /etc/rsyslog.d/smb_audit.conf
+
+    - name: Ensure samba-audit.log file exist
+      ansible.builtin.file:
+        path: /var/log/samba-audit.log
+        state: touch
+      notify: Restart rsyslogd
+  when: opencanary_samba_enabled

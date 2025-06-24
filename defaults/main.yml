@@ -1,0 +1,100 @@
+---
+opencanary_device_node_id: "opencanary-{{ ansible_hostname }}"
+opencanary_custom_skin_folder: ""
+opencanary_ftp_banner: FTP Server Ready
+opencanary_ftp_enabled: false
+opencanary_ftp_port: 21
+opencanary_git_enabled: false
+opencanary_git_port: 9418
+opencanary_http_banner: Apache/2.2.22 (Ubuntu)
+opencanary_http_enabled: false
+opencanary_http_port: 80
+opencanary_http_skin: basicLogin
+opencanary_https_certificate: ""
+opencanary_https_enabled: false
+opencanary_https_key: ""
+opencanary_https_port: 443
+opencanary_https_skin: basicLogin
+opencanary_httpproxy_enabled: false
+opencanary_httpproxy_port: 8080
+opencanary_httpproxy_skin: ms-isa
+opencanary_logger_filename: /var/log/opencanary.log
+opencanary_logger_syslog_url: ""
+opencanary_logger_syslog_port: 514
+opencanary_logtype_ignorelist: [ ]
+opencanary_install_dir: /opt/opencanary
+opencanary_iptables_path: ""
+opencanary_ip_ignorelist: [ ]
+opencanary_llmnr_enabled: false
+opencanary_llmnr_query_interval: 60
+opencanary_llmnr_query_splay: 5
+opencanary_llmnr_hostname: "{{ ansible_hostname }}"
+opencanary_llmnr_port: 5355
+opencanary_mssql_enabled: false
+opencanary_mssql_version: 2012
+opencanary_mssql_port: 1433
+opencanary_mysql_enabled: false
+opencanary_mysql_port: 3306
+opencanary_mysql_banner: 5.5.43-0ubuntu0.14.04.1
+opencanary_ntp_enabled: false
+opencanary_ntp_port: 123
+opencanary_portscan_enabled: false
+opencanary_portscan_ignore_localhost: false
+opencanary_portscan_ignore_ports: [ ]
+opencanary_portscan_iptables_path: /usr/sbin/iptables
+opencanary_portscan_logfile: /var/log/kern.log
+opencanary_portscan_lorate: 3
+opencanary_portscan_nmaposrate: 5
+opencanary_portscan_synrate: 5
+opencanary_slack_webhook_url: ""
+opencanary_sip_enabled: false
+opencanary_sip_port: 5060
+opencanary_smb_auditfile: /var/log/samba-audit.log
+opencanary_samba_comment: "Personal docs"
+opencanary_samba_enabled: false
+opencanary_samba_netbios_name: "{{ ansible_hostname }}"
+opencanary_samba_server_string: ""
+opencanary_samba_share: personal
+opencanary_samba_path: "/opt/{{ opencanary_samba_share }}"
+opencanary_samba_workgroup: WORKGROUP
+opencanary_smtp_from: ""
+opencanary_smtp_mailhost: ""
+opencanary_smtp_port: 25
+opencanary_smtp_subject: OpenCanary Alert
+opencanary_smtp_to: ""
+opencanary_snmp_enabled: false
+opencanary_snmp_port: 161
+opencanary_ssh_enabled: false
+opencanary_ssh_port: 22
+opencanary_ssh_version: SSH-2.0-OpenSSH_5.1p1 Debian-4
+opencanary_rdp_enabled: false
+opencanary_rdp_port: 3389
+opencanary_redis_enabled: false
+opencanary_redis_port: 6379
+opencanary_tcpbanner_enabled: false
+opencanary_tcpbanner_maxnum: 10
+opencanary_tcpbanner_1_alertstring_enabled: false
+opencanary_tcpbanner_1_alertstring: ""
+opencanary_tcpbanner_1_datareceivedbanner: ""
+opencanary_tcpbanner_1_enabled: false
+opencanary_tcpbanner_1_initbanner: ""
+opencanary_tcpbanner_1_keep_alive_enabled: false
+opencanary_tcpbanner_1_keep_alive_idle: 300
+opencanary_tcpbanner_1_keep_alive_interval: 300
+opencanary_tcpbanner_1_keep_alive_probes: 11
+opencanary_tcpbanner_1_keep_alive_secret: ""
+opencanary_tcpbanner_1_port: 8001
+opencanary_teams_webhook_url: ""
+opencanary_telnet_enabled: false
+opencanary_telnet_port: 23
+opencanary_telnet_banner: ""
+opencanary_tftp_enabled: false
+opencanary_tftp_port: 69
+opencanary_version: "0.9.6"
+opencanary_vnc_enabled: false
+opencanary_vnc_port: 5000
+opencanary_webhook_data: '{"message": "%(message)s"}'
+opencanary_webhook_ignore: [ ]
+opencanary_webhook_method: POST
+opencanary_webhook_status_code: 200
+opencanary_webhook_url: ""

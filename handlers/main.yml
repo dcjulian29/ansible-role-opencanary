@@ -1,0 +1,14 @@
+- name: Restart opencanaryd
+  ansible.builtin.systemd_service:
+    name: opencanaryd
+    state: restarted
+
+- name: Restart rsyslogd
+  ansible.builtin.systemd_service:
+    name: rsyslog
+    state: restarted
+
+- name: Restart samba
+  ansible.builtin.systemd_service:
+    name: smbd
+    state: restarted
