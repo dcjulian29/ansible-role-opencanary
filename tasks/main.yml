@@ -3,7 +3,7 @@
   ansible.builtin.apt:
     name: "{{ apt_packages }}"
     state: "{{ 'latest' }}"
-    update_cache: yes
+    update_cache: true
 
 - name: Ensure Samba services exist
   ansible.builtin.apt:
@@ -57,9 +57,9 @@
 - name: Ensure OpenCanary service is enabled
   ansible.builtin.systemd:
     name: opencanaryd
-    enabled: yes
-    masked: no
-    daemon_reload: yes
+    enabled: true
+    masked: false
+    daemon_reload: true
 
 - name: Ensure OpenCanary is configured
   ansible.builtin.template:

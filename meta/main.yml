@@ -1,5 +1,5 @@
 ---
-dependencies: []
+dependencies: [ ]
 galaxy_info:
   author: Julian Easterling
   description: Ansible role to install and configure an OpenCanary honeypot.
