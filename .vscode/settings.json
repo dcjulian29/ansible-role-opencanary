@@ -1,6 +1,15 @@
 {
   "cSpell.words": [
     "dcjulian",
-    "unmark"
-  ]
+    "libpcap",
+    "llmnr",
+    "opencanaryd",
+    "pcapy",
+    "SMNP",
+    "snmp",
+    "unmark",
+    "venv",
+    "virtualenv"
+  ],
+  "ansible.python.interpreterPath": "c:\\Python313\\python.exe"
 }

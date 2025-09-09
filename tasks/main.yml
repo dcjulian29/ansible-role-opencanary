@@ -53,6 +53,7 @@
   ansible.builtin.template:
     src: opencanaryd_service.j2
     dest: /etc/systemd/system/opencanaryd.service
+    mode: "0664"
 
 - name: Ensure OpenCanary service is enabled
   ansible.builtin.systemd:
@@ -65,19 +66,24 @@
   ansible.builtin.template:
     src: opencanary_conf.j2
     dest: /etc/opencanaryd/opencanary.conf
+    mode: "0640"
   notify: Restart opencanaryd
 
 - name: Determine python venv version
   ansible.builtin.command: 'ls "{{ opencanary_install_dir }}/lib"'
   register: version
+  changed_when: false
 
 - name: Ensure custom skin folder and files exist
   ansible.builtin.copy:
     src: "{{ opencanary_http_customskin_folder }}"
     dest: "{{ opencanary_install_dir }}/lib/{{ version.stdout }}/site-packages/opencanary/modules/data/http/skin/"
+    mode: "0640"
   when: opencanary_custom_skin_folder | length > 0
 
-- block:
+- name: Configure Samba settings
+  when: opencanary_samba_enabled
+  block:
     - name: Ensure the Samba share folder exists
       ansible.builtin.file:
         path: "{{ opencanary_samba_path }}"
@@ -88,16 +94,18 @@
       ansible.builtin.template:
         src: samba_conf.j2
         dest: /etc/samba/smb.conf
+        mode: "0640"
       notify: Restart samba
 
     - name: Ensure Samba Audit is configured
       ansible.builtin.template:
         src: samba_audit.j2
         dest: /etc/rsyslog.d/smb_audit.conf
+        mode: "0640"
 
     - name: Ensure samba-audit.log file exist
       ansible.builtin.file:
         path: /var/log/samba-audit.log
         state: touch
+        mode: "0640"
       notify: Restart rsyslogd
-  when: opencanary_samba_enabled
